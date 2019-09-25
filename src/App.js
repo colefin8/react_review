@@ -1,26 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import List from "./Components/List";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      toDoArray: [],
+      userInput: ""
+    };
+  }
+
+  handleInput = value => {
+    this.setState({
+      userInput: value
+    });
+  };
+
+  handleAdd = () => {
+    this.setState({
+      toDoArray: [
+        ...this.state.toDoArray,
+        { item: this.state.userInput, complete: false }
+      ],
+      userInput: ""
+    });
+    // console.log(this.state.toDoArray)
+  };
+
+  deleteItem = index => {
+    let listCopy = [...this.state.toDoArray];
+    listCopy.splice(index, 1);
+    this.setState({ toDoArray: listCopy });
+    // console.log(this.state.toDoArray);
+  };
+
+  completeItem = index => {
+    let listCopy = [...this.state.toDoArray];
+    listCopy[index].complete = true;
+    this.setState({ toDoArray: listCopy });
+  };
+
+  render() {
+    // console.log(this.state);
+    return (
+      <div className="App">
+        <input
+          value={this.state.userInput}
+          onChange={e => this.handleInput(e.target.value)}
+        />
+        <button onClick={() => this.handleAdd()}>Add Item</button>
+        <List
+          todo={this.state.toDoArray}
+          deleteItem={this.deleteItem}
+          completeItem={this.completeItem}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
